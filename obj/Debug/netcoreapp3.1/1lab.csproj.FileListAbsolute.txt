@@ -1,0 +1,13 @@
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab.deps.json
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab.runtimeconfig.json
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab.runtimeconfig.dev.json
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab.dll
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/bin/Debug/netcoreapp3.1/1lab.pdb
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.csprojAssemblyReference.cache
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.AssemblyInfoInputs.cache
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.AssemblyInfo.cs
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.csproj.CoreCompileInputs.cache
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.dll
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.pdb
+/home/sycale/Documents/BSUiR/3_sem/ISP/1lab/obj/Debug/netcoreapp3.1/1lab.genruntimeconfig.cache
