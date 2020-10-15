@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 namespace _1lab {
@@ -113,13 +114,11 @@ namespace _1lab {
         }
 
         static void BWrite (string fileName, List<string> _list) {
-            string path = $"{CurrentDirectory}/{fileName}";
+            string path = @$"{CurrentDirectory}/{fileName}";
             if (File.Exists (path)) {
-                using (BinaryWriter writer = new BinaryWriter (File.Open (path, FileMode.OpenOrCreate))) {
-                    // записываем в файл значение каждого поля структуры
-                    foreach (string s in _list) {
-                        writer.Write (s);
-                    }
+                using (BinaryWriter binWriter =
+                    new BinaryWriter (File.Open (path, FileMode.Create))) {
+                    binWriter.Write (String.Join (" ", _list));
                 }
             } else throw new Exception ("File doesnt exist");
         }
@@ -128,8 +127,6 @@ namespace _1lab {
             string path = $"{CurrentDirectory}/{fileName}";
             if (File.Exists (path)) {
                 using (BinaryReader reader = new BinaryReader (File.Open (path, FileMode.Open))) {
-                    // пока не достигнут конец файла
-                    // считываем каждое значение из файла
                     while (reader.PeekChar () > -1) {
                         _list.Add (reader.ReadString ());
                     }
@@ -151,15 +148,53 @@ namespace _1lab {
             } else throw new Exception ("File doesnt exist");
         }
 
+        public static void Compress (string sourceFile) {
+
+            string path = @$"{CurrentDirectory}/{sourceFile}";
+            string dest = @$"{CurrentDirectory}/{sourceFile.Split('.')[0]}.gz";
+            if (File.Exists (path)) {
+                using (FileStream sourceStream = new FileStream (path, FileMode.OpenOrCreate)) {
+                    using (FileStream targetStream = File.Create (dest)) {
+                        using (GZipStream compressionStream = new GZipStream (targetStream, CompressionMode.Compress)) {
+                            sourceStream.CopyTo (compressionStream);
+                        }
+                    }
+                }
+            } else throw new Exception ("File doesnt exitst");
+        }
+
+        public static void Decompress (string compressedFile, string targetFile) {
+            string path = $"{CurrentDirectory}/{compressedFile}";
+            string dest = $"{CurrentDirectory}/{targetFile}";
+            if (File.Exists (path)) {
+                using (FileStream sourceStream = new FileStream (path, FileMode.OpenOrCreate)) {
+                    // поток для записи восстановленного файла
+                    using (FileStream targetStream = File.Create (dest)) {
+                        // поток разархивации
+                        using (GZipStream decompressionStream = new GZipStream (sourceStream, CompressionMode.Decompress)) {
+                            decompressionStream.CopyTo (targetStream);
+                        }
+                    }
+                }
+            } else throw new Exception ("File doesnt exist");
+        }
+
         static void Main (string[] args) {
 
             List<string> _list = new List<string> ();
-
-            // Commands: pwd, cd, rm, mkdir, binread, binwrite, read, write, ls, cp, showList, >
+            // Commands: pwd, cd, rm, mkdir, read, write, ls, cp, showList, >, gzip, ungzip
             Console.Write ($"Custom@terminal~{PutCurrentDirectoryCut()}: ");
             string command = Console.ReadLine ();
 
             while (command != "quit") {
+                if (command.Split (" ") [0] == "cp") {
+                    try {
+                        CopyFile (command.Split (" ") [1], command.Split (" ") [2]);
+                    } catch (Exception e) {
+                        ErrorMessage (e.Message);
+                        throw;
+                    }
+                }
                 if (command.Split (" ") [0] == "cd") {
                     try {
 
@@ -260,6 +295,51 @@ namespace _1lab {
 
                         ErrorMessage (e.Message);
                     }
+                }
+
+                if (command.Split (" ") [0] == "gzip") {
+                    try {
+                        Compress (command.Split (" ") [1]);
+                        SuccessMessage ($"File {command.Split(" ")[1]} has been successfully zipped");
+                    } catch (Exception e) {
+                        ErrorMessage (e.Message);
+                    }
+                }
+                try {
+                    if (command.Split (" ") [0] == "ungzip") {
+                        try {
+                            if (command.Split (" ").Length < 3) {
+                                throw new Exception ("Not enough params, need 3");
+                            } else {
+                                Decompress (command.Split (" ") [1], command.Split (" ") [2]);
+
+                                SuccessMessage ($"File {command.Split(" ")[1]} has been successfully restored");
+                            }
+
+                        } catch (Exception e) {
+                            ErrorMessage (e.Message);
+                        }
+                    }
+                } catch (Exception e) {
+                    ErrorMessage (e.Message);
+                }
+                try {
+                    if (command.Split (" ") [0] == "rename") {
+                        try {
+                            if (command.Split (" ").Length < 3) {
+                                throw new Exception ("Not enough params, need 3");
+                            } else {
+                                RenameFile (command.Split (" ") [1], command.Split (" ") [2]);
+
+                                SuccessMessage ($"File {command.Split(" ")[1]} has been renamedx");
+                            }
+
+                        } catch (Exception e) {
+                            ErrorMessage (e.Message);
+                        }
+                    }
+                } catch (Exception e) {
+                    ErrorMessage (e.Message);
                 }
                 Console.Write ($"Custom@terminal~{PutCurrentDirectoryCut()}: ");
                 command = Console.ReadLine ();
